@@ -326,9 +326,16 @@ const MyVouchersPage = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  // Guest lookup state
+  const [lookupEmail, setLookupEmail] = useState('');
+  const [lookupRef, setLookupRef] = useState('');
+  const [lookupLoading, setLookupLoading] = useState(false);
+  const [lookupVouchers, setLookupVouchers] = useState<any[] | null>(null);
+  const [lookupError, setLookupError] = useState('');
+
   useEffect(() => {
     if (!user) {
-      navigate('/');
+      setLoading(false);
       return;
     }
 
@@ -343,7 +350,6 @@ const MyVouchersPage = () => {
             houseId: doc.data().houseId,
             createdAt: doc.data().createdAt?.toDate() || new Date(),
           }));
-          
           myVouchers.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
           setVouchers(myVouchers);
         } catch (error) {
@@ -361,8 +367,150 @@ const MyVouchersPage = () => {
     return () => unsubscribe();
   }, [user, navigate]);
 
+  const handleLookup = async () => {
+    if (!lookupEmail || !lookupRef) {
+      toast.error('Please enter both email and transaction reference.');
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(lookupEmail)) {
+      toast.error('Please enter a valid email address.');
+      return;
+    }
+    setLookupLoading(true);
+    setLookupError('');
+    setLookupVouchers(null);
+    try {
+      const res = await fetch(`/api/vouchers/lookup?email=${encodeURIComponent(lookupEmail.trim())}&reference=${encodeURIComponent(lookupRef.trim())}`);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Lookup failed');
+      setLookupVouchers(data.vouchers || []);
+    } catch (err: any) {
+      setLookupError(err.message || 'Failed to look up voucher. Please check your details and try again.');
+    } finally {
+      setLookupLoading(false);
+    }
+  };
+
   if (loading) return <LoadingScreen />;
 
+  // Guest view — lookup form
+  if (!user) {
+    return (
+      <div className="pb-12 px-4 max-w-2xl mx-auto">
+        <header className="mb-8 md:mb-12 text-center">
+          <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-3 tracking-tight">Find Your Voucher</h1>
+          <p className="text-sm md:text-base text-gray-500">Enter your email and transaction reference to retrieve your voucher code.</p>
+        </header>
+
+        <div className="card p-6 md:p-8 mb-6">
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Email Address</label>
+              <div className="relative">
+                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <input
+                  type="email"
+                  value={lookupEmail}
+                  onChange={(e) => setLookupEmail(e.target.value)}
+                  placeholder="The email you used during payment"
+                  className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-900 transition-all text-sm"
+                />
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Transaction Reference</label>
+              <div className="relative">
+                <FileText className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <input
+                  type="text"
+                  value={lookupRef}
+                  onChange={(e) => setLookupRef(e.target.value)}
+                  placeholder="e.g. TXN-ABC123XYZ"
+                  className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-900 transition-all text-sm font-mono"
+                  onKeyDown={(e) => e.key === 'Enter' && handleLookup()}
+                />
+              </div>
+              <p className="text-xs text-gray-400 mt-1.5">Check your email receipt for this reference.</p>
+            </div>
+            <button
+              onClick={handleLookup}
+              disabled={lookupLoading || !lookupEmail || !lookupRef}
+              className={cn(
+                "w-full flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm transition-all",
+                lookupLoading || !lookupEmail || !lookupRef
+                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                  : "bg-gray-900 text-white hover:bg-gray-800"
+              )}
+            >
+              {lookupLoading ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
+                  Looking up...
+                </>
+              ) : (
+                <>
+                  <Search className="w-4 h-4" />
+                  Find Voucher
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+
+        {lookupError && (
+          <div className="card p-4 border-red-200 bg-red-50 mb-6">
+            <div className="flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 text-red-500 flex-shrink-0" />
+              <p className="text-sm text-red-600 font-medium">{lookupError}</p>
+            </div>
+          </div>
+        )}
+
+        {lookupVouchers && lookupVouchers.length > 0 && (
+          <div className="space-y-4">
+            {lookupVouchers.map((v: any) => (
+              <motion.div
+                key={v.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="card p-4 md:p-6 flex justify-between items-center hover:shadow-md transition-shadow"
+              >
+                <div>
+                  <div className="text-xs md:text-sm font-bold text-gray-400 uppercase tracking-widest mb-1">Voucher Code</div>
+                  <div className="text-xl md:text-2xl font-mono font-bold text-gray-900">{v.code}</div>
+                  <div className="text-xs md:text-sm text-gray-500 mt-1">
+                    {new Date(v.createdAt).toLocaleDateString()}
+                  </div>
+                </div>
+                <button
+                  onClick={() => navigate(`/result/${v.id}`)}
+                  className="p-2 md:p-3 bg-gray-50 rounded-full hover:bg-gray-900 hover:text-white transition-all"
+                >
+                  <ChevronRight className="w-4 h-4 md:w-5 md:h-5" />
+                </button>
+              </motion.div>
+            ))}
+          </div>
+        )}
+
+        {lookupVouchers && lookupVouchers.length === 0 && (
+          <div className="text-center py-12 bg-gray-50 rounded-3xl border-2 border-dashed border-gray-200">
+            <AlertTriangle className="w-10 h-10 md:w-12 md:h-12 text-gray-300 mx-auto mb-4" />
+            <p className="text-sm md:text-base text-gray-500 font-medium">No vouchers found for this email and reference.</p>
+            <p className="text-xs text-gray-400 mt-2">Double-check your email and transaction reference are correct.</p>
+          </div>
+        )}
+
+        <div className="mt-8 text-center">
+          <p className="text-sm text-gray-400">
+            <Link to="/login" className="text-gray-900 font-medium hover:underline">Sign in</Link> to see all your vouchers automatically.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // Signed-in view — real-time voucher list
   return (
     <div className="pb-12 px-4 max-w-2xl mx-auto">
       <header className="mb-8 md:mb-12 text-center">
@@ -717,16 +865,28 @@ const PaymentPage = () => {
           <label htmlFor="receiptEmail" className="block text-sm font-medium text-gray-700 mb-2">
             Email Address for Receipt
           </label>
-          <p className="text-xs text-gray-500 mb-3">We'll send your voucher code and transaction reference to this email.</p>
+          <p className="text-xs text-gray-500 mb-3">
+            {user ? 'Your voucher will be linked to your account email.' : "We'll send your voucher code and transaction reference to this email."}
+          </p>
           <input
             type="email"
             id="receiptEmail"
             value={receiptEmail}
-            onChange={(e) => setReceiptEmail(e.target.value)}
+            onChange={(e) => { if (!user) setReceiptEmail(e.target.value); }}
+            readOnly={!!user}
             placeholder="you@example.com"
-            className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-900 transition-all"
+            className={cn(
+              "w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-900 transition-all",
+              user && "bg-gray-50 text-gray-500 cursor-not-allowed"
+            )}
             required
           />
+          {user && (
+            <p className="text-xs text-gray-400 mt-2 flex items-center gap-1">
+              <Lock className="w-3 h-3" />
+              Locked to your account email so your voucher appears in My Vouchers.
+            </p>
+          )}
         </div>
 
         <button
