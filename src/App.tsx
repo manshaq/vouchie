@@ -138,10 +138,8 @@ const Navbar = ({ onOpenAuth }: { onOpenAuth: () => void }) => {
       <nav className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md border-b border-gray-100 z-50">
         <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2 md:gap-4">
-            <Link to="/" className="flex items-center gap-2 font-black text-lg md:text-xl tracking-tighter text-gray-900">
-              <div className="w-8 h-8 bg-gray-900 text-white rounded-xl flex items-center justify-center shadow-sm">
-                <Tag className="w-4 h-4" />
-              </div>
+            <Link to="/" className="flex items-center gap-2 font-black text-2xl md:text-3xl tracking-tighter text-gray-900">
+              <Tag className="w-8 h-8 md:w-10 md:h-10 text-gray-900" />
               <span className="hidden xs:inline">VoucherHub</span>
             </Link>
             <div className="hidden md:block">
