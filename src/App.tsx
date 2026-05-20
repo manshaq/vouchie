@@ -69,7 +69,7 @@ const AuthModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }
         <h2 className="text-2xl font-bold text-gray-900 mb-2">
           {isLogin ? 'Welcome Back' : 'Create Account'}
         </h2>
-        <p className="text-gray-500 text-sm mb-6">
+        <p className="text-gray-500 text-xs md:text-sm mb-6">
           {isLogin ? 'Enter your details to access your vouchers.' : 'Sign up securely to manage your vouchers.'}
         </p>
 
@@ -605,7 +605,7 @@ const HouseSelection = () => {
               <ChevronRight className="w-4 h-4 md:w-5 md:h-5 text-gray-300 group-hover:text-gray-900 transition-colors" />
             </div>
             <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-1">{house.name}</h3>
-            <div className="flex items-center gap-1.5 text-gray-500 text-sm md:text-base">
+            <div className="flex items-center gap-1.5 text-gray-500 text-xs md:text-sm md:text-base">
               <MapPin className="w-3.5 h-3.5 md:w-4 md:h-4" />
               {house.location}
             </div>
@@ -1319,20 +1319,20 @@ const AdminDashboard = () => {
               </div>
 
               <div className="card overflow-x-auto">
-                <table className="w-full text-left min-w-[500px]">
+                <table className="w-full text-left min-w-full md:min-w-[500px]">
                   <thead className="bg-gray-50 border-b border-gray-100">
                     <tr>
-                      <th className="px-6 py-4 text-xs md:text-sm font-bold text-gray-400 uppercase tracking-widest">Name</th>
-                      <th className="px-6 py-4 text-xs md:text-sm font-bold text-gray-400 uppercase tracking-widest">Location</th>
-                      <th className="px-6 py-4 text-xs md:text-sm font-bold text-gray-400 uppercase tracking-widest text-right">Actions</th>
+                      <th className="px-3 py-3 md:px-6 md:py-4 text-[10px] md:text-sm font-bold text-gray-400 uppercase tracking-widest">Name</th>
+                      <th className="px-3 py-3 md:px-6 md:py-4 text-[10px] md:text-sm font-bold text-gray-400 uppercase tracking-widest">Location</th>
+                      <th className="px-3 py-3 md:px-6 md:py-4 text-[10px] md:text-sm font-bold text-gray-400 uppercase tracking-widest text-right">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100">
                     {houses.map((house) => (
                       <tr key={house.id} className="hover:bg-gray-50/50 transition-colors">
-                        <td className="px-6 py-4 font-medium text-gray-900 text-sm">{house.name}</td>
-                        <td className="px-6 py-4 text-gray-500 text-sm">{house.location}</td>
-                        <td className="px-6 py-4 text-right">
+                        <td className="px-3 py-3 md:px-6 md:py-4 font-medium text-gray-900 text-xs md:text-sm">{house.name}</td>
+                        <td className="px-3 py-3 md:px-6 md:py-4 text-gray-500 text-xs md:text-sm">{house.location}</td>
+                        <td className="px-3 py-3 md:px-6 md:py-4 text-right">
                           <button 
                             onClick={() => handleDeleteHouse(house.id)}
                             className="text-red-500 hover:text-red-700 p-3 md:p-4 hover:bg-red-50 rounded-full transition-colors"
@@ -1401,25 +1401,25 @@ const AdminDashboard = () => {
               </div>
 
               <div className="card overflow-x-auto">
-                <table className="w-full text-left min-w-[600px]">
+                <table className="w-full text-left min-w-full md:min-w-[600px]">
                   <thead className="bg-gray-50 border-b border-gray-100">
                     <tr>
-                      <th className="px-6 py-4 text-xs md:text-sm font-bold text-gray-400 uppercase tracking-widest">Plan</th>
-                      <th className="px-6 py-4 text-xs md:text-sm font-bold text-gray-400 uppercase tracking-widest">House</th>
-                      <th className="px-6 py-4 text-xs md:text-sm font-bold text-gray-400 uppercase tracking-widest">Price</th>
-                      <th className="px-6 py-4 text-xs md:text-sm font-bold text-gray-400 uppercase tracking-widest text-right">Actions</th>
+                      <th className="px-3 py-3 md:px-6 md:py-4 text-[10px] md:text-sm font-bold text-gray-400 uppercase tracking-widest">Plan</th>
+                      <th className="px-3 py-3 md:px-6 md:py-4 text-[10px] md:text-sm font-bold text-gray-400 uppercase tracking-widest">House</th>
+                      <th className="px-3 py-3 md:px-6 md:py-4 text-[10px] md:text-sm font-bold text-gray-400 uppercase tracking-widest">Price</th>
+                      <th className="px-3 py-3 md:px-6 md:py-4 text-[10px] md:text-sm font-bold text-gray-400 uppercase tracking-widest text-right">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100">
                     {plans.map((plan) => (
                       <tr key={plan.id} className="hover:bg-gray-50/50 transition-colors">
-                        <td className="px-6 py-4 font-medium text-gray-900 text-sm">
+                        <td className="px-3 py-3 md:px-6 md:py-4 font-medium text-gray-900 text-xs md:text-sm">
                           {plan.name}
                           <div className="text-xs text-gray-400">{plan.duration}</div>
                         </td>
-                        <td className="px-6 py-4 text-gray-500 text-sm">{houses.find(h => h.id === plan.houseId)?.name}</td>
-                        <td className="px-6 py-4 text-gray-900 font-semibold text-sm">₦{plan.price.toLocaleString()}</td>
-                        <td className="px-6 py-4 text-right">
+                        <td className="px-3 py-3 md:px-6 md:py-4 text-gray-500 text-xs md:text-sm">{houses.find(h => h.id === plan.houseId)?.name}</td>
+                        <td className="px-3 py-3 md:px-6 md:py-4 text-gray-900 font-semibold text-xs md:text-sm">₦{plan.price.toLocaleString()}</td>
+                        <td className="px-3 py-3 md:px-6 md:py-4 text-right">
                           <button 
                             onClick={() => handleDeletePlan(plan.id)}
                             className="text-red-500 hover:text-red-700 p-3 md:p-4 hover:bg-red-50 rounded-full transition-colors"
@@ -1508,30 +1508,30 @@ const AdminDashboard = () => {
               </div>
 
               <div className="card overflow-x-auto">
-                <table className="w-full text-left min-w-[600px]">
+                <table className="w-full text-left min-w-full md:min-w-[600px]">
                   <thead className="bg-gray-50 border-b border-gray-100">
                     <tr>
-                      <th className="px-6 py-4 text-xs md:text-sm font-bold text-gray-400 uppercase tracking-widest">Code</th>
-                      <th className="px-6 py-4 text-xs md:text-sm font-bold text-gray-400 uppercase tracking-widest">Plan</th>
-                      <th className="px-6 py-4 text-xs md:text-sm font-bold text-gray-400 uppercase tracking-widest">Status</th>
-                      <th className="px-6 py-4 text-xs md:text-sm font-bold text-gray-400 uppercase tracking-widest text-right">Created</th>
+                      <th className="px-3 py-3 md:px-6 md:py-4 text-[10px] md:text-sm font-bold text-gray-400 uppercase tracking-widest">Code</th>
+                      <th className="px-3 py-3 md:px-6 md:py-4 text-[10px] md:text-sm font-bold text-gray-400 uppercase tracking-widest">Plan</th>
+                      <th className="px-3 py-3 md:px-6 md:py-4 text-[10px] md:text-sm font-bold text-gray-400 uppercase tracking-widest">Status</th>
+                      <th className="px-3 py-3 md:px-6 md:py-4 text-[10px] md:text-sm font-bold text-gray-400 uppercase tracking-widest text-right">Created</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100">
                     {filteredVouchers.slice(0, 50).map((voucher) => (
                       <tr key={voucher.id} className="hover:bg-gray-50/50 transition-colors">
-                        <td className="px-6 py-4 font-mono font-bold text-gray-900 text-sm">{voucher.code}</td>
-                        <td className="px-6 py-4 text-gray-500 text-sm">{plans.find(p => p.id === voucher.planId)?.name}</td>
-                        <td className="px-6 py-4">
+                        <td className="px-3 py-3 md:px-6 md:py-4 font-mono font-bold text-gray-900 text-xs md:text-sm">{voucher.code}</td>
+                        <td className="px-3 py-3 md:px-6 md:py-4 text-gray-500 text-xs md:text-sm">{plans.find(p => p.id === voucher.planId)?.name}</td>
+                        <td className="px-3 py-3 md:px-6 md:py-4">
                           <span className={cn(
-                            "px-2 py-1 rounded-full text-xs font-bold uppercase tracking-wider",
+                            "px-2 py-1 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-wider",
                             voucher.status === 'unused' ? "bg-green-50 text-green-600" :
                             voucher.status === 'used' ? "bg-gray-100 text-gray-500" : "bg-red-50 text-red-600"
                           )}>
                             {voucher.status}
                           </span>
                         </td>
-                        <td className="px-6 py-4 text-right text-xs md:text-sm text-gray-400">
+                        <td className="px-3 py-3 md:px-6 md:py-4 text-right text-xs md:text-sm text-gray-400">
                           {voucher.createdAt?.toDate().toLocaleDateString()}
                         </td>
                       </tr>
@@ -1558,26 +1558,26 @@ const AdminDashboard = () => {
                 </button>
               </div>
               <div className="card overflow-x-auto">
-                <table className="w-full text-left min-w-[700px]">
+                <table className="w-full text-left min-w-[500px] md:min-w-[700px]">
                 <thead className="bg-gray-50 border-b border-gray-100">
                   <tr>
-                    <th className="px-6 py-4 text-xs md:text-sm font-bold text-gray-400 uppercase tracking-widest">Reference</th>
-                    <th className="px-6 py-4 text-xs md:text-sm font-bold text-gray-400 uppercase tracking-widest">Plan</th>
-                    <th className="px-6 py-4 text-xs md:text-sm font-bold text-gray-400 uppercase tracking-widest">Amount</th>
-                    <th className="px-6 py-4 text-xs md:text-sm font-bold text-gray-400 uppercase tracking-widest">Customer</th>
-                    <th className="px-6 py-4 text-xs md:text-sm font-bold text-gray-400 uppercase tracking-widest text-right">Status</th>
+                    <th className="px-3 py-3 md:px-6 md:py-4 text-[10px] md:text-sm font-bold text-gray-400 uppercase tracking-widest">Reference</th>
+                    <th className="px-3 py-3 md:px-6 md:py-4 text-[10px] md:text-sm font-bold text-gray-400 uppercase tracking-widest">Plan</th>
+                    <th className="px-3 py-3 md:px-6 md:py-4 text-[10px] md:text-sm font-bold text-gray-400 uppercase tracking-widest">Amount</th>
+                    <th className="px-3 py-3 md:px-6 md:py-4 text-[10px] md:text-sm font-bold text-gray-400 uppercase tracking-widest">Customer</th>
+                    <th className="px-3 py-3 md:px-6 md:py-4 text-[10px] md:text-sm font-bold text-gray-400 uppercase tracking-widest text-right">Status</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
                   {transactions.map((txn) => (
                     <tr key={txn.id} className="hover:bg-gray-50/50 transition-colors">
-                      <td className="px-6 py-4 font-mono text-xs md:text-sm text-gray-900">{txn.reference}</td>
-                      <td className="px-6 py-4 text-gray-500 text-sm">{plans.find(p => p.id === txn.planId)?.name}</td>
-                      <td className="px-6 py-4 text-gray-900 font-semibold text-sm">₦{txn.amount.toLocaleString()}</td>
-                      <td className="px-6 py-4 text-gray-500 text-xs md:text-sm">{txn.customerEmail}</td>
-                      <td className="px-6 py-4 text-right">
+                      <td className="px-3 py-3 md:px-6 md:py-4 font-mono text-[10px] md:text-sm text-gray-900">{txn.reference}</td>
+                      <td className="px-3 py-3 md:px-6 md:py-4 text-gray-500 text-xs md:text-sm">{plans.find(p => p.id === txn.planId)?.name}</td>
+                      <td className="px-3 py-3 md:px-6 md:py-4 text-gray-900 font-semibold text-xs md:text-sm">₦{txn.amount.toLocaleString()}</td>
+                      <td className="px-3 py-3 md:px-6 md:py-4 text-gray-500 text-xs md:text-sm">{txn.customerEmail}</td>
+                      <td className="px-3 py-3 md:px-6 md:py-4 text-right">
                         <span className={cn(
-                          "px-2 py-1 rounded-full text-xs font-bold uppercase tracking-wider",
+                          "px-2 py-1 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-wider",
                           txn.status === 'completed' ? "bg-green-50 text-green-600" :
                           txn.status === 'pending' ? "bg-amber-50 text-amber-600" : "bg-red-50 text-red-600"
                         )}>
@@ -1594,26 +1594,26 @@ const AdminDashboard = () => {
 
           {activeTab === 'logs' && (
             <div className="card overflow-x-auto">
-              <table className="w-full text-left min-w-[600px]">
+              <table className="w-full text-left min-w-full md:min-w-[600px]">
                 <thead className="bg-gray-50 border-b border-gray-100">
                   <tr>
-                    <th className="px-6 py-4 text-xs md:text-sm font-bold text-gray-400 uppercase tracking-widest">Timestamp</th>
-                    <th className="px-6 py-4 text-xs md:text-sm font-bold text-gray-400 uppercase tracking-widest">Action</th>
-                    <th className="px-6 py-4 text-xs md:text-sm font-bold text-gray-400 uppercase tracking-widest">Details</th>
+                    <th className="px-3 py-3 md:px-6 md:py-4 text-[10px] md:text-sm font-bold text-gray-400 uppercase tracking-widest">Timestamp</th>
+                    <th className="px-3 py-3 md:px-6 md:py-4 text-[10px] md:text-sm font-bold text-gray-400 uppercase tracking-widest">Action</th>
+                    <th className="px-3 py-3 md:px-6 md:py-4 text-[10px] md:text-sm font-bold text-gray-400 uppercase tracking-widest">Details</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
                   {logs.map((log) => (
                     <tr key={log.id} className="hover:bg-gray-50/50 transition-colors">
-                      <td className="px-6 py-4 text-xs md:text-sm text-gray-400 whitespace-nowrap">
+                      <td className="px-3 py-3 md:px-6 md:py-4 text-[10px] md:text-sm text-gray-400 whitespace-nowrap">
                         {log.createdAt?.toDate().toLocaleString()}
                       </td>
-                      <td className="px-6 py-4">
-                        <span className="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs font-bold uppercase tracking-wider">
+                      <td className="px-3 py-3 md:px-6 md:py-4">
+                        <span className="px-2 py-1 bg-gray-100 text-gray-600 rounded text-[10px] md:text-xs font-bold uppercase tracking-wider">
                           {log.action}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-xs text-gray-500 max-w-xs truncate">
+                      <td className="px-3 py-3 md:px-6 md:py-4 text-[10px] md:text-xs text-gray-500 max-w-xs truncate">
                         {log.details}
                       </td>
                     </tr>
